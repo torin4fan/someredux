@@ -1,7 +1,8 @@
 import * as types from '../actions/action-types';
 
 const initialState = {
-    user: []
+    login: '',
+    password: ''
 };
 
 const loginReducer = function(state = initialState, action) {

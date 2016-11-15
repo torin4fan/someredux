@@ -58495,6 +58495,8 @@
 	
 	var _loginForm2 = _interopRequireDefault(_loginForm);
 	
+	var _reactRedux = __webpack_require__(172);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var LoginContainer = _react2.default.createClass({
@@ -58502,6 +58504,7 @@
 	
 	
 	    handleSubmit: function handleSubmit(values) {
+	        var searchType = store.searchLayoutState.searchType;
 	        values.preventDefault();
 	
 	        console.log(this.refs);
@@ -58510,12 +58513,18 @@
 	    },
 	
 	    render: function render() {
-	        return _react2.default.createElement(_loginForm2.default, { handleSubmit: this.handleSubmit });
+	        return _react2.default.createElement(_loginForm2.default, { user: this.props.user, handleSubmit: this.handleSubmit });
 	    }
 	
 	});
 	
-	exports.default = LoginContainer;
+	var mapStateToProps = function mapStateToProps(store) {
+	    return {
+	        user: store.loginState.user
+	    };
+	};
+	
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(LoginContainer);
 
 /***/ },
 /* 487 */

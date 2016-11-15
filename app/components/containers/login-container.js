@@ -1,11 +1,14 @@
 import React from 'react';
 import LoginForm from '../views/login-form';
+import { connect } from 'react-redux';
+import { loadSearchLayout } from '../../actions/search-layout-actions';
 
 const LoginContainer = React.createClass({
 
 
 
     handleSubmit: function (values) {
+        let searchType = store.searchLayoutState.searchType;
         values.preventDefault();
 
         console.log(this.refs);
@@ -16,10 +19,16 @@ const LoginContainer = React.createClass({
 
     render: function () {
         return (
-            <LoginForm handleSubmit={this.handleSubmit} />
+            <LoginForm  user={this.props.user} handleSubmit={this.handleSubmit} />
         );
     }
 
 });
 
-export default LoginContainer;
+const mapStateToProps = function(store) {
+    return {
+        user: store.loginState.user
+    };
+};
+
+export default connect(mapStateToProps)(LoginContainer);
