@@ -4,27 +4,22 @@ import TextField from 'material-ui/TextField';
 
 export default React.createClass({
 
-    getQuery: function() {
-        return this.refs.login.value;
-    },
 
     render: function() {
         const { handleSubmit, onFieldChange, validate } = this.props;
 
         return (
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} className="form">
                 <TextField
                     hintText="Email"
                     floatingLabelText="Email"
                     onChange={onFieldChange}
-                    ref="login"
                     type="text"
                     defaultValue=""
                     errorText={validate.loginValidate}
                     name="email"
                 /><br />
                 <TextField
-                    ref="password"
                     hintText="Password"
                     floatingLabelText="Password"
                     onChange={onFieldChange}

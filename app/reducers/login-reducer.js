@@ -1,17 +1,18 @@
 import * as types from '../actions/action-types';
 
 const initialState = {
-    user: {
-        login: "",
-        password: ""
-    }
+    email: "",
+    password: ""
 };
 
 const loginReducer = function(state = initialState, action) {
 
     switch(action.type) {
         case types.SET_LOGIN_FORM:
-            return Object.assign({}, state, { user: action.user });
+            return Object.assign({}, state, {
+                email: action.email,
+                password: action.password
+            });
     }
 
     return state;

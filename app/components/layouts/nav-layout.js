@@ -7,7 +7,6 @@ let style = {backgroundColor: indigoA700};
 
 export default class NavLayout extends React.Component {
 
-
     render() {
         return (
             <div>

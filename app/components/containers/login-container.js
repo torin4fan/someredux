@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
 import LoginForm from '../views/login-form';
-import {connect} from 'react-redux';
+import store from '../../store';
+import { setLoginForm } from '../../actions/login-actions'
+import { browserHistory } from 'react-router'
 
 const LoginContainer = React.createClass({
 
@@ -35,7 +37,7 @@ const LoginContainer = React.createClass({
         }
     },
 
-    onFieldChange: function (event, val)  {
+    onFieldChange: function (event)  {
         let result = this.validation(event);
 
         switch (event.target.name) {
@@ -52,18 +54,14 @@ const LoginContainer = React.createClass({
 
     handleSubmit: function(data) {
         data.preventDefault();
-        console.log('Submission received!', data.target.password.value);
 
-
-        //console.log(this.refs);
-
-        return false;
+        store.dispatch(setLoginForm(data.target.email.value, data.target.password.value));
+        browserHistory.push('/');
     },
 
     render: function () {
         return (
             <LoginForm
-                user={this.props}
                 validate={this.state}
                 onFieldChange = {this.onFieldChange}
                 handleSubmit={this.handleSubmit}
@@ -73,10 +71,4 @@ const LoginContainer = React.createClass({
 
 });
 
-const mapStateToProps = (store) => {
-    return {
-        user: store.loginState.user
-    };
-};
-
-export default connect(mapStateToProps)(LoginContainer);
+export default LoginContainer;
