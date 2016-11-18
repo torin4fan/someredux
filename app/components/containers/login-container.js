@@ -18,7 +18,7 @@ const LoginContainer = React.createClass({
         return re.test(email);
     },
 
-    validation: function (element) {
+    validation: function (el, val) {
 
         const errorMsg = {
             required: "This field is required",
@@ -26,37 +26,38 @@ const LoginContainer = React.createClass({
             symbols: "Create password with 6 and more symbols"
         };
 
-        if (element.target.value.length === 0) {
-            return errorMsg.required;
+        if (val.length === 0 && el === 'email') {
+            this.setState({loginValidate: errorMsg.required});
+            return false;
         }
-        else if (element.target.name === 'email') {
-            return (this.validateEmail(element.target.value)) ? '' : errorMsg.email;
+        else if (val.length === 0 && el === 'password') {
+            this.setState({passwordValidate: errorMsg.required});
+            return false;
         }
-        else if (element.target.name === 'password') {
-            return (element.target.value.length < 6) ? errorMsg.symbols : '';
+        else if (el === 'email') {
+            let emailValid = (this.validateEmail(val)) ? '' : errorMsg.email;
+            this.setState({loginValidate: emailValid});
+        }
+        else if (el === 'password') {
+            let passwordValid = (val.length < 6) ? errorMsg.symbols : '';
+            this.setState({passwordValidate: passwordValid});
         }
     },
 
     onFieldChange: function (event)  {
-        let result = this.validation(event);
-
-        switch (event.target.name) {
-            case 'email':
-                this.setState({loginValidate: result});
-                break;
-            case 'password':
-                this.setState({passwordValidate: result});
-                break;
-            default:
-               return false;
-        }
+        this.validation(event.target.name, event.target.value);
     },
 
     handleSubmit: function(data) {
         data.preventDefault();
 
-        store.dispatch(setLoginForm(data.target.email.value, data.target.password.value));
-        browserHistory.push('/');
+        let checkEmail = this.validation(data.target.email.name, data.target.email.value);
+        let checkPass = this.validation(data.target.password.name, data.target.password.value);
+
+        if(checkEmail === undefined && checkPass === undefined && this.state.loginValidate.length === 0 && this.state.passwordValidate.length === 0) {
+            store.dispatch(setLoginForm(data.target.email.value, data.target.password.value));
+            browserHistory.push('/');
+        }
     },
 
     render: function () {

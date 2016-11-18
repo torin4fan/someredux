@@ -38952,7 +38952,6 @@
 	    displayName: 'Home',
 	
 	    render: function render() {
-	        console.log(this.props, 'и шо ті скаже');
 	        return _react2.default.createElement(
 	            'div',
 	            { className: 'home-page' },
@@ -39043,7 +39042,7 @@
 	        return re.test(email);
 	    },
 	
-	    validation: function validation(element) {
+	    validation: function validation(el, val) {
 	
 	        var errorMsg = {
 	            required: "This field is required",
@@ -39051,35 +39050,35 @@
 	            symbols: "Create password with 6 and more symbols"
 	        };
 	
-	        if (element.target.value.length === 0) {
-	            return errorMsg.required;
-	        } else if (element.target.name === 'email') {
-	            return this.validateEmail(element.target.value) ? '' : errorMsg.email;
-	        } else if (element.target.name === 'password') {
-	            return element.target.value.length < 6 ? errorMsg.symbols : '';
+	        if (val.length === 0 && el === 'email') {
+	            this.setState({ loginValidate: errorMsg.required });
+	            return false;
+	        } else if (val.length === 0 && el === 'password') {
+	            this.setState({ passwordValidate: errorMsg.required });
+	            return false;
+	        } else if (el === 'email') {
+	            var emailValid = this.validateEmail(val) ? '' : errorMsg.email;
+	            this.setState({ loginValidate: emailValid });
+	        } else if (el === 'password') {
+	            var passwordValid = val.length < 6 ? errorMsg.symbols : '';
+	            this.setState({ passwordValidate: passwordValid });
 	        }
 	    },
 	
 	    onFieldChange: function onFieldChange(event) {
-	        var result = this.validation(event);
-	
-	        switch (event.target.name) {
-	            case 'email':
-	                this.setState({ loginValidate: result });
-	                break;
-	            case 'password':
-	                this.setState({ passwordValidate: result });
-	                break;
-	            default:
-	                return false;
-	        }
+	        this.validation(event.target.name, event.target.value);
 	    },
 	
 	    handleSubmit: function handleSubmit(data) {
 	        data.preventDefault();
 	
-	        _store2.default.dispatch((0, _loginActions.setLoginForm)(data.target.email.value, data.target.password.value));
-	        _reactRouter.browserHistory.push('/');
+	        var checkEmail = this.validation(data.target.email.name, data.target.email.value);
+	        var checkPass = this.validation(data.target.password.name, data.target.password.value);
+	
+	        if (checkEmail === undefined && checkPass === undefined && this.state.loginValidate.length === 0 && this.state.passwordValidate.length === 0) {
+	            _store2.default.dispatch((0, _loginActions.setLoginForm)(data.target.email.value, data.target.password.value));
+	            _reactRouter.browserHistory.push('/');
+	        }
 	    },
 	
 	    render: function render() {

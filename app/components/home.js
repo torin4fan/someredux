@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 
 const Home = React.createClass({
     render: function () {
-        console.log(this.props, 'и шо ті скаже');
         return (
             <div className="home-page">
                 <h1>The app is now using Redux</h1>
